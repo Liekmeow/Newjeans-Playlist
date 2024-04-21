@@ -1,0 +1,178 @@
+
+body {
+    background-color: black;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.hide {
+    display: none;
+    
+}
+
+.buttons-strip {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    padding: 0;
+}
+
+.buttons-strip:hover {
+    cursor: pointer;
+}
+.flex-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 50%;
+    border: 1px solid rgb(28, 28, 28);
+    color: white;
+}
+
+.song-photo {
+    padding: 2vh;
+}
+
+.album-cover {
+    width: 50%;
+}
+
+.song-name {
+    margin: 1vh;
+
+}
+
+.song-artist {
+    margin: 1vh;
+    font-size: 13px;
+    color: rgb(92, 91, 91);
+}
+
+.song-progressbar {
+    width: 80%;
+    height: 3px;
+    background-color: rgb(38, 38, 38);
+    margin-top: 9px;
+    margin-bottom: 9px;
+}
+
+.song-progress {
+    background-color: red;
+    width: 0%   ;
+    height: 100%;
+}
+
+.icons-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    
+}
+
+#playPauseButton {
+    width: 10px;
+    
+}
+
+.icons-button:hover {
+    cursor: pointer;
+}
+
+.icon {
+    color: white;
+}
+
+.song-queue {
+    display: flex;
+    flex-flow: column wrap;
+    background-color: rgb(0, 0, 0
+        );
+}
+
+.up-nexts {
+    background-color: transparent;
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+}
+
+.song-in-list {
+    height: 60px;
+    border: 1px solid black; /*Remove later */
+    
+    
+}
+
+.song-in-list-button {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    align-items: center;
+    padding: 0px;
+}
+
+
+.song-in-list-cover {
+    position: relative;
+    margin: 0px 13px 0px 3px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.song-in-list-cover::before {
+    content: "";
+    background-image: url("Sources/New Jeans - album cover.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+
+}
+
+
+.icon-in-cover {
+    position: relative;
+    display: none;
+    font-size: 20px;
+}
+
+.song-in-list-button:hover .song-in-list-cover::before {
+    opacity: 0.5;
+}
+
+.song-in-list-button:hover .icon-in-cover {
+    display: block;
+    color: white;
+}
+
+
+.song-in-list-name {
+    margin: 0px 0 0 0;
+    font-size: 12px;
+    text-align: start;
+    color: white;
+}
+
+.song-in-list-artist-and-duration {
+    margin: 5px 0 0 0;
+    color: rgb(122, 122, 122);
+    font-size: 12px;
+    text-align: start;
+}
+
+[aria-current=true] {
+    background-color: rgb(28, 28, 28);
+}
