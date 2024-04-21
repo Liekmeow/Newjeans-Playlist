@@ -1,5 +1,6 @@
 const progressInProgressBar = document.getElementById('song-progress');
-const songProgressBar = document.getElementById('song-progressbar')
+const songProgressBar = document.getElementById('song-progressbar');
+const shuffleButton = document.getElementById('shuffle-button');
 const playPauseButton = document.getElementById('playPauseButton');
 const backwardStepButton = document.getElementById('backward-step-button');
 const forwardStepButton = document.getElementById('forward-step-button');
@@ -7,6 +8,7 @@ const songTimeDisplay = document.getElementById('song-time')
 const upcommingTrackList = document.getElementById('upcomming-songs');
 const songInfoNameDisplay = document.getElementById("song-info-song-name");
 const songInfoArtistDisplay = document.getElementById("song-info-song-artist");
+
 
 
 const allSongs = [
@@ -99,11 +101,14 @@ const backwardStep = () => {
 
 const forwardStep = () => {
     const currentSongIndex = getCurrentSongIndex();
+    console.log(userData.songs.length); 
+    console.log(`CURRENT INDEX ${currentSongIndex}`)
     if (currentSongIndex < userData.songs.length - 1) {
-        playSong(currentSongIndex + 1);
+        playSong(userData.songs[currentSongIndex + 1].id);
     }
     else {
-        setTime(audio.duration);
+        audio.currentTime = audio.duration;
+        stopSong();
         console.log(`USER DATA.CURRENT SONG ${JSON.stringify(userData.currentSong)}`);
     }
 }
@@ -113,12 +118,18 @@ const displayTime = () => {
         const minutes = Math.floor(userData.currentTime / 60);
         const seconds = Math.floor(userData.currentTime % 60).toString().padStart(2, "0");
         return `${minutes}:${seconds}`};
-    songTimeDisplay.innerHTML = `${parseTime()}/${userData.currentSong.duration}`;
+    if (userData.currentSong?.duration) {
+        songTimeDisplay.innerHTML = `${parseTime()}/${userData.currentSong.duration}`;
+    }
+    else {
+        songTimeDisplay.innerHTML = ``;
+    }
+        
 
 }
 const replaySong = () => {
-    setTime(0);
-    audio.play();
+    audio.currentTime = 0;
+    playSong(userData.currentSong.id);
 }
 
 const setPlayButtonPlaying = () => {
@@ -140,7 +151,7 @@ const renderSongs = (songList) => {
         </button>
       </li>`
     }).join("");
-    console.log(songsHTML);
+    //console.log(songsHTML);
     upcommingTrackList.innerHTML = songsHTML;
 
 }
@@ -160,8 +171,14 @@ const toggleSong = (id) => {
 
 const setSongInfoDisplay = () => {
     const song = userData.currentSong;
-    songInfoNameDisplay.innerHTML = `${song.song}`;
-    songInfoArtistDisplay.innerHTML = `${song.artist}`;
+    if (song) { 
+        songInfoNameDisplay.innerHTML = `${song.song}`;
+        songInfoArtistDisplay.innerHTML = `${song.artist}`;
+    }
+    else {
+        songInfoNameDisplay.innerHTML = ` `;
+        songInfoArtistDisplay.innerHTML = ` `;
+    }
 }
 
 const highlightCurrentSong = () => {
@@ -175,16 +192,22 @@ const updateProgressBar = () => {
     progressInProgressBar.style.width = `${(Math.floor(audio.currentTime)/audio.duration)*100}%`
 }
 
+const shuffle = () => {
+    userData.songs.sort(() =>  Math.floor(Math.random() * 2) - 1);
+    renderSongs(userData?.songs);
+    audio.currentTime = 0;
+    userData.currentSong = null;
+    stopSong();
+    setSongInfoDisplay();
+    displayTime();
+}
+
 //HELP FUNCTIONS
 const getCurrentSongIndex = () => {
     console.log(`usercurrentsongid = ${userData.currentSong.id}`)
     return userData.songs.findIndex(({id}) => id === userData?.currentSong.id);
 }
 
-const setTime = (time) => {
-    audio.currentTime = time;
-    userData.currentTime = audio.currentTime;
-}
 
 //ADDING EVENT LSITENERS
 playPauseButton.addEventListener("click", () => {
@@ -207,6 +230,12 @@ backwardStepButton.addEventListener("click", () => {
 forwardStepButton.addEventListener("click", () => {
     forwardStep();
 })
+
+shuffleButton.addEventListener("click", () => {
+    console.log(`shuffle button clicked`);
+    shuffle();
+})
+
 audio.addEventListener("timeupdate", () => {
     userData.currentTime = audio.currentTime;
     displayTime();
@@ -214,7 +243,12 @@ audio.addEventListener("timeupdate", () => {
 }
 );
 audio.addEventListener("ended", () => {
-    forwardStep();
+    const currentSongIndex = getCurrentSongIndex();
+    if (currentSongIndex < userData.songs.length - 1) {
+        console.log("fart")
+        forwardStep();
+    }
+    
 })
 renderSongs(userData?.songs)
 
